@@ -2,6 +2,7 @@ console.log('Now starting app...')
 const Vue = require('vue/dist/vue.common.js')
 const { dialog } = require('electron').remote
 import {Stats} from './stats';
+import './rawReportViewer'
 const appObject = {
     el: '#app',
     data: {
@@ -9,6 +10,8 @@ const appObject = {
         chromeVersion: process.versions['chrome'],
         electronVersion: process.versions['electron'],
         debugInfoVisible: false,
+
+        stats: Stats,
     },
     methods: {
         toggleDebugInfo: function() {
