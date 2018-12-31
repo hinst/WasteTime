@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "sourceRoot": "../src/",
+        "module": "commonjs",
+        "sourceMap": true,
+        "mapRoot": "../dist/dist",
+        "rootDir": "src",
+        "outDir": "dist"
+    }
+}

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Hello World!</title>
+  <link rel="stylesheet" type="text/css" href="third/w3/w3.css">
+  <link rel="stylesheet" type="text/css" href="node_modules/@fortawesome/fontawesome-free/css/all.css">
+</head>
+<body>
+  <!-- All of the Node.js APIs are available in this renderer process. -->
+  <div id="app" class="w3-container">
+    <div style="display:flex; justify-content: space-between">
+      <h1>H-Repo-Calendar</h1>
+      <button class="w3-btn w3-black" title="Show debug info" v-on:click="toggleDebugInfo"><i class="fas fa-bug"></i></button>
+    </div>
+    <div v-if="debugInfoVisible" class="w3-panel w3-border">
+      <list>
+        <li>Node: {{nodeVersion}}</li>
+        <li>Chrome: {{chromeVersion}}</li>
+        <li>Electron: {{electronVersion}}</li>
+      </list>
+    </div>
+  </div>
+  <script>
+    // You can also require other files to run in this process
+    require('./dist/renderer.js')
+  </script>
+</body>
+
+</html>
