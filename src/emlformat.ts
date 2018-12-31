@@ -1,3 +1,4 @@
+/** For NPM package "eml-format" */
 export class EmlData {
     subject: string
     from: string
