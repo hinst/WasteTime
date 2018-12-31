@@ -14,6 +14,7 @@ export class WeekInfo {
     /** Subject of email letter  */
     subject: string
     startDate: Date
+    totalDuration: number;
     projects: InfoRow[]
     languages: InfoRow[]
     editors: InfoRow[]
@@ -30,8 +31,8 @@ export class Stats {
             if (filePath.endsWith('.eml')) {
                 const fileContent = fs.readFileSync(filePath, 'utf-8');
                 const data = await this.loadFile(fileContent);
-                fs.writeFileSync(filePath + '.html', data.html);
-                fs.writeFileSync(filePath + '.txt', data.text);
+                // fs.writeFileSync(filePath + '.html', data.html);
+                // fs.writeFileSync(filePath + '.txt', data.text);
             }
         }
     }
@@ -53,18 +54,70 @@ export class Stats {
         if (data.subject.includes('WakaTime Weekly Summary')) {
             const date = extractDateFromSubject(data.subject)
             console.log(data.subject, '->', date);
-            const weekInfo = new WeekInfo();
-            parseContent(data.html);
+            const weekInfo = parseTextContent(data.text);
             weekInfo.subject = data.subject;
             weekInfo.startDate = date;
+            console.log(durationToText(weekInfo.totalDuration));
             this.weeks.push(weekInfo)
         }
     }
 }
 
+/** deprecated */
 function parseContent(htmlString) {
     const tree = HTMLParser.parse(htmlString);
-    console.log(tree.querySelector('table'));
+    const introTextNode = tree.querySelector('p');
+    const introText = introTextNode.childNodes[0].rawText;
+}
+
+enum SectionType {
+    starting,
+    unknown,
+    projects,
+    languages,
+}
+
+function parseTextContent(textString: string): WeekInfo {
+    const weekInfo = new WeekInfo();
+    const lines = textString.split('\n').map(line => line.trim());
+    let sectionType = SectionType.starting;
+    for (const line of lines) {
+        if (sectionType == SectionType.starting) {
+            weekInfo.totalDuration = parseWakaDuration(line);
+            sectionType = SectionType.unknown;
+        }
+    }
+    return weekInfo;
+}
+
+function findMarkerIndex(marker: string, textParts: string[]) {
+    for (var i = 0; i < textParts.length; i++) {
+        if (textParts[i].startsWith(marker))
+            return i;
+    }
+    return -1;
+}
+
+/** returns seconds */
+function parseWakaDuration(text: string): number {
+    const textParts = text.split(' ');
+    let result = 0;
+    const hourIndex = findMarkerIndex('hr', textParts);
+    if (hourIndex > 0) {
+        const hours = parseInt(textParts[hourIndex - 1]);
+        result += hours * 60 * 60;
+    }
+    const minuteIndex = findMarkerIndex('min', textParts);
+    if (minuteIndex > 0) {
+        const minutes = parseInt(textParts[minuteIndex - 1]);
+        result += minutes * 60;
+    }
+    const secondIndex = findMarkerIndex('sec', textParts);
+    if (secondIndex > 0) {
+        const seconds = parseInt(textParts[secondIndex - 1]);
+        result += seconds;
+    }
+    return result;
 }
 
 function extractDateFromSubject(text: string) {
@@ -82,3 +135,25 @@ function extractDateFromSubject(text: string) {
     return result;
 }
 
+/** duration in seconds to human-readable text */
+function durationToText(duration: number): string {
+    const hours = Math.floor(duration / (60 * 60));
+    duration = duration % (60 * 60);
+
+    const minutes = Math.floor(duration / 60);
+    duration = duration % 60;
+
+    const seconds = duration;
+
+    let text = '';
+    function add(value, unit) {
+        if (value > 0)
+            text += '' + value + unit + ' ';
+    }
+    add(hours, 'h')
+    add(minutes, 'm')
+    add(seconds, 's')
+    if (text.length == 0)
+        text = '0'
+    return text;
+}
