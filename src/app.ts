@@ -1,6 +1,7 @@
 console.log('Now starting app...')
 const Vue = require('vue/dist/vue.common.js')
 const { dialog } = require('electron').remote
+import {Stats} from './stats';
 const appObject = {
     el: '#app',
     data: {
@@ -14,7 +15,15 @@ const appObject = {
             this.debugInfoVisible = !this.debugInfoVisible;
         },
         openRepo: function() {
-            console.log(dialog.showOpenDialog({properties: ['openDirectory']}));
+            const files: string[] = dialog.showOpenDialog({properties: ['openDirectory']});
+            if (files.length == 1) {
+                const directory = files[0];
+                console.log('loading', directory);
+                const stats = new Stats();
+                stats.loadDir(directory);
+            } else {
+                alert('You need to select one directory');
+            }
         },
         openRepoHistory: function() {
         }    
