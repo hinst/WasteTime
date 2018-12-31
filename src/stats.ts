@@ -142,7 +142,7 @@ function extractDateFromSubject(text: string) {
 }
 
 /** duration in seconds to human-readable text */
-function durationToText(duration: number): string {
+export function durationToText(duration: number): string {
     const hours = Math.floor(duration / (60 * 60));
     duration = duration % (60 * 60);
 
