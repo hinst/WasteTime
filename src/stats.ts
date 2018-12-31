@@ -61,6 +61,12 @@ export class Stats {
             this.weeks.push(weekInfo)
         }
     }
+    get totalDuration() {
+        let sum = 0;
+        for (const week of this.weeks)
+            sum += week.totalDuration;
+        return sum;
+    }
 }
 
 /** deprecated */
