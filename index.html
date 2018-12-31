@@ -8,18 +8,25 @@
   <link rel="stylesheet" type="text/css" href="node_modules/@fortawesome/fontawesome-free/css/all.css">
 </head>
 <body>
+  <input id="fileDirInput" type="file" style="display: none" webkitdirectory/>
   <!-- All of the Node.js APIs are available in this renderer process. -->
   <div id="app" class="w3-container">
     <div style="display:flex; justify-content: space-between">
-      <h1>H-Repo-Calendar</h1>
-      <button class="w3-btn w3-black" title="Show debug info" v-on:click="toggleDebugInfo"><i class="fas fa-bug"></i></button>
+      <div>
+          <button class="w3-btn w3-black" title="Open repository" v-on:click="openRepo"><i class="fas fa-folder-open"></i></button>
+          <button class="w3-btn w3-black" title="Open recent" v-on:click="openRepoHistory"><i class="fas fa-history"></i></button>
+          WasteTime
+      </div>
+      <div>
+        <button class="w3-btn w3-black" title="Show debug info" v-on:click="toggleDebugInfo"><i class="fas fa-bug"></i></button>
+      </div>
     </div>
     <div v-if="debugInfoVisible" class="w3-panel w3-border">
-      <list>
+      <ul>
         <li>Node: {{nodeVersion}}</li>
         <li>Chrome: {{chromeVersion}}</li>
         <li>Electron: {{electronVersion}}</li>
-      </list>
+      </ul>
     </div>
   </div>
   <script>

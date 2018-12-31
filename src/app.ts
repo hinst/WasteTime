@@ -1,6 +1,7 @@
 console.log('Now starting app...')
 const Vue = require('vue/dist/vue.common.js')
-const app = new Vue({
+const { dialog } = require('electron').remote
+const appObject = {
     el: '#app',
     data: {
         nodeVersion: process.versions.node,
@@ -11,6 +12,12 @@ const app = new Vue({
     methods: {
         toggleDebugInfo: function() {
             this.debugInfoVisible = !this.debugInfoVisible;
-        }
+        },
+        openRepo: function() {
+            console.log(dialog.showOpenDialog({properties: ['openDirectory']}));
+        },
+        openRepoHistory: function() {
+        }    
     }
-})
+};
+const app = new Vue(appObject);
