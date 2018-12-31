@@ -53,11 +53,9 @@ export class Stats {
     private loadEmail(data: EmlData) {
         if (data.subject.includes('WakaTime Weekly Summary')) {
             const date = extractDateFromSubject(data.subject)
-            console.log(data.subject, '->', date);
             const weekInfo = parseTextContent(data.text);
             weekInfo.subject = data.subject;
             weekInfo.startDate = date;
-            console.log(durationToText(weekInfo.totalDuration));
             this.weeks.push(weekInfo)
         }
     }
@@ -143,6 +141,9 @@ function extractDateFromSubject(text: string) {
 
 /** duration in seconds to human-readable text */
 export function durationToText(duration: number): string {
+    const days = Math.floor(duration / (60*60*24));
+    duration = duration % (60*60*24);
+
     const hours = Math.floor(duration / (60 * 60));
     duration = duration % (60 * 60);
 
@@ -156,10 +157,11 @@ export function durationToText(duration: number): string {
         if (value > 0)
             text += '' + value + unit + ' ';
     }
+    add(days, 'd')
     add(hours, 'h')
     add(minutes, 'm')
     add(seconds, 's')
     if (text.length == 0)
         text = '0'
-    return text;
+    return text
 }

@@ -1,6 +1,6 @@
 <div>
-    There are <b>{{stats.weeks ? stats.weeks.length : 0}}</b> entries. Total duration: {{totalDuration}}
+    There are <mark>{{stats.weeks ? stats.weeks.length : 0}}</mark> entries. Total duration: <mark>{{totalDuration}}</mark>
     <ol>
-        <li v-for='week in stats.weeks'>{{week.subject}}</li>
+        <li v-for='week in stats.weeks'>{{week.subject}} • {{durationToText(week.totalDuration)}}</li>
     </ol>
 </div>
