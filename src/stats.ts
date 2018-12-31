@@ -1,7 +1,7 @@
 import { EmlData } from "./emlformat";
 const HTMLParser = require('node-html-parser');
 
-const emlformat = require('eml-format')
+const mailparser = require('mailparser')
 const fs = require('fs')
 
 export class InfoRow {
@@ -37,7 +37,7 @@ export class Stats {
     }
     private async loadFile(fileContent): Promise<EmlData> {
         const promise = new Promise<EmlData>((resolve, reject) => {
-            emlformat.read(fileContent, (error, data: EmlData) => {
+            mailparser.simpleParser(fileContent, (error, data: EmlData) => {
                 if (!error) {
                     this.loadEmail(data);
                     resolve(data);
