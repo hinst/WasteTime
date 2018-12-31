@@ -1,6 +1,6 @@
 <div>
-    There are {{weeks ? weeks.length : 0}} entries
+    There are <b>{{weeks ? weeks.length : 0}}</b> entries
     <ol>
-        <li v-for='item in weeks'>heh</li>
+        <li v-for='week in weeks'>{{week.subject}}</li>
     </ol>
 </div>

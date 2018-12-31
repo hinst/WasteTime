@@ -10,6 +10,8 @@ export class InfoRow {
 }
 
 export class WeekInfo {
+    /** Subject of email letter  */
+    subject: string
     startDate: Date
     projects: InfoRow[]
     languages: InfoRow[]
@@ -63,6 +65,7 @@ export class Stats {
             const date = extractDateFromSubject(data.subject)
             console.log(data.subject, '->', date);
             const weekInfo = new WeekInfo();
+            weekInfo.subject = data.subject;
             weekInfo.startDate = date;
             this.weeks.push(weekInfo)
         }
