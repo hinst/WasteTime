@@ -1,4 +1,5 @@
 import { EmlData } from "./emlformat";
+const HTMLParser = require('node-html-parser');
 
 const emlformat = require('eml-format')
 const fs = require('fs')
@@ -19,6 +20,53 @@ export class WeekInfo {
     systems: InfoRow[]
 }
 
+export class Stats {
+    weeks: WeekInfo[]
+    async loadDir(dir: string) {
+        this.weeks = []
+        const files = fs.readdirSync(dir);
+        for (const file of files) {
+            const filePath: string = dir + '/' + file;
+            if (filePath.endsWith('.eml')) {
+                const fileContent = fs.readFileSync(filePath, 'utf-8');
+                const data = await this.loadFile(fileContent);
+                fs.writeFileSync(filePath + '.html', data.html);
+                fs.writeFileSync(filePath + '.txt', data.text);
+            }
+        }
+    }
+    private async loadFile(fileContent): Promise<EmlData> {
+        const promise = new Promise<EmlData>((resolve, reject) => {
+            emlformat.read(fileContent, (error, data: EmlData) => {
+                if (!error) {
+                    this.loadEmail(data);
+                    resolve(data);
+                } else {
+                    console.error(error);
+                    reject(error);
+                }
+            });
+        });
+        return promise;
+    }
+    private loadEmail(data: EmlData) {
+        if (data.subject.includes('WakaTime Weekly Summary')) {
+            const date = extractDateFromSubject(data.subject)
+            console.log(data.subject, '->', date);
+            const weekInfo = new WeekInfo();
+            parseContent(data.html);
+            weekInfo.subject = data.subject;
+            weekInfo.startDate = date;
+            this.weeks.push(weekInfo)
+        }
+    }
+}
+
+function parseContent(htmlString) {
+    const tree = HTMLParser.parse(htmlString);
+    console.log(tree.querySelector('table'));
+}
+
 function extractDateFromSubject(text: string) {
     let result = null;
     const desiredPosition = text.search(/for \d\d\d\d-\d\d-\d\d/);
@@ -34,40 +82,3 @@ function extractDateFromSubject(text: string) {
     return result;
 }
 
-export class Stats {
-    weeks: WeekInfo[]
-    async loadDir(dir: string) {
-        this.weeks = []
-        const files = fs.readdirSync(dir);
-        for (const file of files) {
-            const filePath: string = dir + '/' + file;
-            if (filePath.endsWith('.eml')) {
-                const fileContent = fs.readFileSync(filePath, 'utf-8');
-                await this.loadFile(fileContent);
-            }
-        }
-    }
-    private async loadFile(fileContent) {
-        const promise = new Promise((resolve, reject) => {
-            emlformat.read(fileContent, (error, data: EmlData) => {
-                if (!error) {
-                    this.loadEmail(data);
-                    resolve();
-                } else {
-                    console.error(error);
-                    reject(error);
-                }
-            });
-        });
-    }
-    private loadEmail(data: EmlData) {
-        if (data.subject.includes('WakaTime Weekly Summary')) {
-            const date = extractDateFromSubject(data.subject)
-            console.log(data.subject, '->', date);
-            const weekInfo = new WeekInfo();
-            weekInfo.subject = data.subject;
-            weekInfo.startDate = date;
-            this.weeks.push(weekInfo)
-        }
-    }
-}
