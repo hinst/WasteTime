@@ -28,10 +28,10 @@
         <li>Electron: {{electronVersion}}</li>
       </ul>
     </div>
-    <div>
-      <raw-report-viewer/>
+    <div v-if="stats">
+      <raw-report-viewer :weeks="stats.weeks"/>
     </div>
-    </div>
+  </div>
   <script>
     // You can also require other files to run in this process
     require('./dist/renderer.js')

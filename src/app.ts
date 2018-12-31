@@ -11,25 +11,26 @@ const appObject = {
         electronVersion: process.versions['electron'],
         debugInfoVisible: false,
 
-        stats: Stats,
+        stats: null as Stats,
     },
     methods: {
         toggleDebugInfo: function() {
             this.debugInfoVisible = !this.debugInfoVisible;
         },
-        openRepo: function() {
+        openRepo: async function() {
             const files: string[] = dialog.showOpenDialog({properties: ['openDirectory']});
             if (files.length == 1) {
                 const directory = files[0];
                 console.log('loading', directory);
                 const stats = new Stats();
-                stats.loadDir(directory);
+                await stats.loadDir(directory);
+                this.stats = stats;
             } else {
                 alert('You need to select one directory');
             }
         },
         openRepoHistory: function() {
-        }    
+        }
     }
 };
 const app = new Vue(appObject);

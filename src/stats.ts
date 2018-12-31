@@ -34,21 +34,29 @@ function extractDateFromSubject(text: string) {
 
 export class Stats {
     weeks: WeekInfo[]
-    loadDir(dir: string) {
+    async loadDir(dir: string) {
         this.weeks = []
         const files = fs.readdirSync(dir);
         for (const file of files) {
             const filePath: string = dir + '/' + file;
             if (filePath.endsWith('.eml')) {
                 const fileContent = fs.readFileSync(filePath, 'utf-8');
-                emlformat.read(fileContent, (error, data: EmlData) => {
-                    if (!error)
-                        this.loadEmail(data);
-                    else
-                        console.error(error);
-                });
+                await this.loadFile(fileContent);
             }
         }
+    }
+    private async loadFile(fileContent) {
+        const promise = new Promise((resolve, reject) => {
+            emlformat.read(fileContent, (error, data: EmlData) => {
+                if (!error) {
+                    this.loadEmail(data);
+                    resolve();
+                } else {
+                    console.error(error);
+                    reject(error);
+                }
+            });
+        });
     }
     private loadEmail(data: EmlData) {
         if (data.subject.includes('WakaTime Weekly Summary')) {
