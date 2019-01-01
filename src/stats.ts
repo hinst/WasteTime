@@ -10,10 +10,12 @@ export class InfoRow {
 }
 
 export class WeekInfo {
+    constructor() {
+    }
     /** Subject of email letter  */
     subject: string
     startDate: Date
-    totalDuration: number = 0;
+    totalDuration: number = 0
     projects: InfoRow[] = []
     languages: InfoRow[] = []
     editors: InfoRow[] = []
@@ -73,6 +75,11 @@ enum SectionType {
     languages,
 }
 
+function pushIfDefined(array: Array<any>, item: any) {
+    if (item != null)
+        array.push(item);
+}
+
 function parseTextContent(textString: string): WeekInfo {
     const weekInfo = new WeekInfo();
     const lines = textString.split('\n').map(line => line.trim());
@@ -86,10 +93,11 @@ function parseTextContent(textString: string): WeekInfo {
                 sectionType = SectionType.projects;
             else if (line.startsWith("Languages"))
                 sectionType = SectionType.languages;
-        } else if (sectionType == SectionType.projects) {
-            weekInfo.projects.push(parseWakaInfoRow(line))
+        }
+        if (sectionType == SectionType.projects) {
+            pushIfDefined(weekInfo.projects, parseWakaInfoRow(line));
         } else if (sectionType == SectionType.languages) {
-            weekInfo.languages.push(parseWakaInfoRow(line))
+            pushIfDefined(weekInfo.languages, parseWakaInfoRow(line));
         } else if (line.length == 0) {
             sectionType = SectionType.unknown;
         }
@@ -171,8 +179,12 @@ export function durationToText(duration: number): string {
 
 function parseWakaInfoRow(text: string): InfoRow {
     const parts = text.split(':').map(part => part.trim());
-    const infoRow = new InfoRow();
-    infoRow.title = parts[0];
-    infoRow.time = parseWakaDuration(parts[1]);
-    return infoRow;
+    if (parts.length >= 2) {
+        const infoRow = new InfoRow();
+        infoRow.title = parts[0];
+        infoRow.time = parseWakaDuration(parts[1]);
+        return infoRow;
+    } else {
+        return null;
+    }
 }
