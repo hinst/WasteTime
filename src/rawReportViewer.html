@@ -1,6 +1,6 @@
 <div>
     There are <mark>{{stats.weeks ? stats.weeks.length : 0}}</mark> entries. Total duration: <mark>{{totalDuration}}</mark>
-    <ol>
-        <li v-for='week in stats.weeks'>{{week.subject}} • {{durationToText(week.totalDuration)}}</li>
-    </ol>
+    <div v-for='week in stats.weeks' class="w3-panel w3-border">
+        {{week.subject}} • {{durationToText(week.totalDuration)}} • projects: {{week.projects.length}} • languages: {{week.languages.length}}
+    </div>
 </div>
