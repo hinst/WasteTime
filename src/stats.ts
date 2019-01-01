@@ -1,5 +1,4 @@
 import { EmlData } from "./emlformat";
-const HTMLParser = require('node-html-parser');
 
 const mailparser = require('mailparser')
 const fs = require('fs')
@@ -14,11 +13,11 @@ export class WeekInfo {
     /** Subject of email letter  */
     subject: string
     startDate: Date
-    totalDuration: number;
-    projects: InfoRow[]
-    languages: InfoRow[]
-    editors: InfoRow[]
-    systems: InfoRow[]
+    totalDuration: number = 0;
+    projects: InfoRow[] = []
+    languages: InfoRow[] = []
+    editors: InfoRow[] = []
+    systems: InfoRow[] = []
 }
 
 export class Stats {
@@ -67,13 +66,6 @@ export class Stats {
     }
 }
 
-/** deprecated */
-function parseContent(htmlString) {
-    const tree = HTMLParser.parse(htmlString);
-    const introTextNode = tree.querySelector('p');
-    const introText = introTextNode.childNodes[0].rawText;
-}
-
 enum SectionType {
     starting,
     unknown,
@@ -86,8 +78,19 @@ function parseTextContent(textString: string): WeekInfo {
     const lines = textString.split('\n').map(line => line.trim());
     let sectionType = SectionType.starting;
     for (const line of lines) {
-        if (sectionType == SectionType.starting) {
+        if (sectionType == SectionType.starting && line.length > 0) {
             weekInfo.totalDuration = parseWakaDuration(line);
+            sectionType = SectionType.unknown;
+        } else if (sectionType == SectionType.unknown) {
+            if (line.startsWith("Projects"))
+                sectionType = SectionType.projects;
+            else if (line.startsWith("Languages"))
+                sectionType = SectionType.languages;
+        } else if (sectionType == SectionType.projects) {
+            weekInfo.projects.push(parseWakaInfoRow(line))
+        } else if (sectionType == SectionType.languages) {
+            weekInfo.languages.push(parseWakaInfoRow(line))
+        } else if (line.length == 0) {
             sectionType = SectionType.unknown;
         }
     }
@@ -164,4 +167,12 @@ export function durationToText(duration: number): string {
     if (text.length == 0)
         text = '0'
     return text
+}
+
+function parseWakaInfoRow(text: string): InfoRow {
+    const parts = text.split(':').map(part => part.trim());
+    const infoRow = new InfoRow();
+    infoRow.title = parts[0];
+    infoRow.time = parseWakaDuration(parts[1]);
+    return infoRow;
 }

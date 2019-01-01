@@ -11,6 +11,7 @@ const appObject = {
         electronVersion: process.versions['electron'],
         debugInfoVisible: false,
 
+        loading: false,
         stats: null as Stats,
     },
     methods: {
@@ -21,10 +22,14 @@ const appObject = {
             const files: string[] = dialog.showOpenDialog({properties: ['openDirectory']});
             if (files.length == 1) {
                 const directory = files[0];
-                console.log('loading', directory);
                 const stats = new Stats();
-                await stats.loadDir(directory);
-                this.stats = stats;
+                this.loading = true;
+                try {
+                    await stats.loadDir(directory);
+                    this.stats = stats;
+                } finally {
+                    this.loading = false;
+                }
             } else {
                 alert('You need to select one directory');
             }

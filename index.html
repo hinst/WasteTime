@@ -3,8 +3,9 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Hello World!</title>
+  <title>WasteTime analyzer</title>
   <link rel="stylesheet" type="text/css" href="third/w3/w3.css">
+  <link rel="stylesheet" type="text/css" href="third/loading.css">
   <link rel="stylesheet" type="text/css" href="node_modules/@fortawesome/fontawesome-free/css/all.css">
 </head>
 <body>
@@ -27,6 +28,9 @@
         <li>Chrome: {{chromeVersion}}</li>
         <li>Electron: {{electronVersion}}</li>
       </ul>
+    </div>
+    <div v-if="loading" style="text-align: center">
+      <div class="lds-dual-ring"></div>
     </div>
     <div v-if="stats">
       <raw-report-viewer :stats="stats"/>
