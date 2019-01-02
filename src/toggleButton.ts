@@ -17,6 +17,7 @@ const component = {
     methods: {
         receiveClick: function() {
             this.enabled = !this.enabled;
+            this.$emit('toggled', this.enabled);
         }
     }
 }

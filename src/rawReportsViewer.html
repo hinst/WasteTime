@@ -1,9 +1,6 @@
 <div>
-    There are <mark>{{stats.weeks ? stats.weeks.length : 0}}</mark> entries. Total duration: <mark>{{totalDuration}}</mark>
-    <div v-for='week in stats.weeks' class="w3-panel w3-border">
-        {{week.subject}} • {{durationToText(week.totalDuration)}} • <toggle-button v-on:click="projectsVisible = !projectsVisible"/> projects: {{week.projects.length}}
-        <div v-if="projectsVisible">
-            projects
-        </div>
+    There are <mark>{{stats.weeks ? stats.weeks.length : 0}}</mark> entries. Total duration: <mark>{{ durationToText(stats.totalDuration) }}</mark>
+    <div v-for="week in stats.weeks" class="w3-panel w3-border">
+        <raw-report-viewer :week="week"/>
     </div>
 </div>

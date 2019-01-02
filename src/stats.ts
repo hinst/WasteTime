@@ -1,4 +1,4 @@
-import { EmlData } from "./emlformat";
+import { EmlData } from "./emlFormat";
 
 const mailparser = require('mailparser')
 const fs = require('fs')
@@ -93,13 +93,13 @@ function parseTextContent(textString: string): WeekInfo {
                 sectionType = SectionType.projects;
             else if (line.startsWith("Languages"))
                 sectionType = SectionType.languages;
-        }
-        if (sectionType == SectionType.projects) {
+        } else if (line.length == 0) {
+            console.log('reset')
+            sectionType = SectionType.unknown;
+        } else if (sectionType == SectionType.projects) {
             pushIfDefined(weekInfo.projects, parseWakaInfoRow(line));
         } else if (sectionType == SectionType.languages) {
             pushIfDefined(weekInfo.languages, parseWakaInfoRow(line));
-        } else if (line.length == 0) {
-            sectionType = SectionType.unknown;
         }
     }
     return weekInfo;

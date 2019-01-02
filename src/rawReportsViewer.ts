@@ -1,21 +1,16 @@
-import { durationToText } from './stats'
 import { uiMixin } from './uiMixin';
 import './toggleButton'
+import './rawReportViewer'
 const Vue = require('vue/dist/vue.common.js')
 const fs = require('fs')
 const component = {
-    template: fs.readFileSync('./src/rawReportViewer.html').toString(),
+    template: fs.readFileSync('./src/rawReportsViewer.html').toString(),
     props: ['stats'],
     data: function() {
-        return {
-            projectsVisible: false,
-        }
+        return {}
     },
     computed: {
-        totalDuration: function() {
-            return durationToText(this.stats.totalDuration);
-        }
     },
     mixins: [uiMixin]
 }
-Vue.component('raw-report-viewer', component);
+Vue.component('raw-reports-viewer', component);

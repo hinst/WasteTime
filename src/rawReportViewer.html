@@ -1,0 +1,29 @@
+<div>
+    {{week.subject}}
+    •
+    {{durationToText(week.totalDuration)}}
+    •
+    <toggle-button v-on:toggled="toggleProjectsPanel($event)"/>
+    projects: {{week.projects.length}}
+    •
+    <toggle-button v-on:toggled="toggleLanguagesPanel($event)"/>
+    languages: {{week.languages.length}}
+
+    <div v-if="projectsPanelVisible">
+            <div class="w3-panel w3-leftbar">Projects</div>
+            <ul>
+            <li v-for="project in week.projects">
+                {{project.title}} = {{ durationToText(project.time) }}
+            </li>
+        </ul>
+    </div>
+
+    <div v-if="languagesPanelVisible">
+        <div class="w3-panel w3-leftbar">Languages</div>
+        <ul>
+            <li v-for="language in week.languages">
+                {{language.title}} == {{ durationToText(language.time) }}
+            </li>
+        </ul>
+    </div>
+</div>

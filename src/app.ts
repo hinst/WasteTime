@@ -2,7 +2,7 @@ console.log('Now starting app...')
 const Vue = require('vue/dist/vue.common.js')
 const { dialog } = require('electron').remote
 import {Stats} from './stats';
-import './rawReportViewer'
+import './rawReportsViewer'
 const appObject = {
     el: '#app',
     data: {
