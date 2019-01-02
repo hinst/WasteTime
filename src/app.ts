@@ -4,7 +4,8 @@ const electronRemote = require('electron').remote
 const { Menu, MenuItem, dialog } = electronRemote
 import {Stats} from './stats';
 import './rawReportsViewer'
-const component = {
+import './topListViewer'
+const appComponent = {
     el: '#app',
     data: function() {
         return {
@@ -16,7 +17,8 @@ const component = {
             loading: false,
             stats: null as Stats,
             viewIndex: 0,
-            viewIndexStats: 0,
+            viewIndexRaws: 0,
+            viewIndexTops: 1,
         }
     },
     methods: {
@@ -43,14 +45,14 @@ const component = {
             const menu = new Menu();
             menu.append(new MenuItem({
                 label: "Raw view", 
-                click: () => { this.viewIndex = 0 }
+                click: () => { this.viewIndex = this.viewIndexRaws }
             }));
             menu.append(new MenuItem({
                 label: "Top view", 
-                click: () => { this.viewIndex = 1 }
+                click: () => { this.viewIndex = this.viewIndexTops }
             }));
             menu.popup({ window: electronRemote.getCurrentWindow() });
         }
     }
 };
-new Vue(component);
+new Vue(appComponent);

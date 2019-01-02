@@ -1,0 +1,5 @@
+<div>
+    <div v-for="row in rows">
+        {{row.title}} = {{durationToText(row.time)}} || {{durationToText(row.time, true)}}
+    </div>
+</div>

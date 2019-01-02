@@ -11,6 +11,10 @@
     hr {
       margin: 4px 0;
     }
+    .w3-panel {
+      margin-top: 4px;
+      margin-bottom: 4px;
+    }
   </style>
 </head>
 <body>
@@ -39,7 +43,12 @@
       <div class="lds-dual-ring"></div>
     </div>
     <div v-if="stats">
-      <raw-reports-viewer v-if="viewIndex == viewIndexStats" :stats="stats"/>
+      <div v-if="viewIndex == viewIndexRaws">
+        <raw-reports-viewer :stats="stats"/>
+      </div>
+      <div v-if="viewIndex == viewIndexTops">
+        <top-list-viewer :stats="stats"/>
+      </div>
     </div>
   </div>
   <script>

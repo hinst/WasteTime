@@ -1,7 +1,7 @@
 const fs = require('fs')
 const Vue = require('vue/dist/vue.common.js')
 
-const componentObject = {
+export const toggleButton = {
     template: fs.readFileSync('./src/toggleButton.html').toString(),
     props: ['title'],
     data: function() {
@@ -21,4 +21,4 @@ const componentObject = {
         }
     }
 }
-Vue.component('toggle-button', componentObject);
+Vue.component('toggle-button', toggleButton);

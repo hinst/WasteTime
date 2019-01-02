@@ -6,7 +6,7 @@ const fs = require('fs')
 export class InfoRow {
     title: string
     /** seconds */
-    time: number
+    time: number = 0
 }
 
 export class WeekInfo {
@@ -79,7 +79,7 @@ export class Stats {
                 targetProject.time += project.time;
             }
         }
-        projects.sort((a, b) => (a.time - b.time));
+        projects.sort((a, b) => -(a.time - b.time));
         return projects;
     }
 }
@@ -110,7 +110,6 @@ function parseTextContent(textString: string): WeekInfo {
             else if (line.startsWith("Languages"))
                 sectionType = SectionType.languages;
         } else if (line.length == 0) {
-            console.log('reset')
             sectionType = SectionType.unknown;
         } else if (sectionType == SectionType.projects) {
             pushIfDefined(weekInfo.projects, parseWakaInfoRow(line));
@@ -167,9 +166,10 @@ function extractDateFromSubject(text: string) {
 }
 
 /** duration in seconds to human-readable text */
-export function durationToText(duration: number): string {
-    const days = Math.floor(duration / (60*60*24));
-    duration = duration % (60*60*24);
+export function durationToText(duration: number, useWorkingDay: boolean): string {
+    const dayDivider = 60 * 60 * (useWorkingDay ? 8 : 24 );
+    const days = Math.floor(duration / dayDivider);
+    duration = duration % dayDivider;
 
     const hours = Math.floor(duration / (60 * 60));
     duration = duration % (60 * 60);
