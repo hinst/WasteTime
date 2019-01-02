@@ -66,6 +66,21 @@ export class Stats {
             sum += week.totalDuration;
         return sum;
     }
+    getTopProjects(): InfoRow[] {
+        const projects: InfoRow[] = []
+        for (const week of this.weeks) {
+            for (const project of week.projects) {
+                let targetProject = projects.find(p => p.title == project.title);
+                if (targetProject == null) {
+                    targetProject = new InfoRow();
+                    targetProject.title = project.title;
+                    projects.push(targetProject);
+                }
+                targetProject.time += project.time;
+            }
+        }
+        return projects;
+    }
 }
 
 enum SectionType {
