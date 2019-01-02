@@ -1,5 +1,9 @@
 <div>
+    <div class="w3-panel w3-border">
+        Total projects: {{rows.length}}
+        <button class="w3-btn w3-black" v-on:click="changeCurrentDayType">{{currentDayTypeAsString}}</button>
+    </div>
     <div v-for="row in rows">
-        {{row.title}} = {{durationToText(row.time)}} || {{durationToText(row.time, true)}}
+        {{row.title}} = {{durationToText(row.time, currentDayType)}}
     </div>
 </div>
