@@ -1,18 +1,23 @@
 console.log('Now starting app...')
 const Vue = require('vue/dist/vue.common.js')
-const { dialog } = require('electron').remote
+const electronRemote = require('electron').remote
+const { Menu, MenuItem, dialog } = electronRemote
 import {Stats} from './stats';
 import './rawReportsViewer'
 const appObject = {
     el: '#app',
-    data: {
-        nodeVersion: process.versions.node,
-        chromeVersion: process.versions['chrome'],
-        electronVersion: process.versions['electron'],
-        debugInfoVisible: false,
+    data: function() {
+        return {
+            nodeVersion: process.versions.node,
+            chromeVersion: process.versions['chrome'],
+            electronVersion: process.versions['electron'],
+            debugInfoVisible: false,
 
-        loading: false,
-        stats: null as Stats,
+            loading: false,
+            stats: null as Stats,
+            viewIndex: 0,
+            viewIndexStats: 0,
+        }
     },
     methods: {
         toggleDebugInfo: function() {
@@ -34,7 +39,17 @@ const appObject = {
                 alert('You need to select one directory');
             }
         },
-        openRepoHistory: function() {
+        openBarsMenu: function() {
+            const menu = new Menu();
+            menu.append(new MenuItem({
+                label: "Raw view", 
+                click: () => { this.viewIndex = 0 }
+            }));
+            menu.append(new MenuItem({
+                label: "Top view", 
+                click: () => { this.viewIndex = 1 }
+            }));
+            menu.popup({ window: electronRemote.getCurrentWindow() });
         }
     }
 };

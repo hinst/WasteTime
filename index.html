@@ -7,6 +7,11 @@
   <link rel="stylesheet" type="text/css" href="third/w3/w3.css">
   <link rel="stylesheet" type="text/css" href="third/loading.css">
   <link rel="stylesheet" type="text/css" href="node_modules/@fortawesome/fontawesome-free/css/all.css">
+  <style>
+    hr {
+      margin: 4px 0;
+    }
+  </style>
 </head>
 <body>
   <input id="fileDirInput" type="file" style="display: none" webkitdirectory/>
@@ -14,8 +19,8 @@
   <div id="app" class="w3-container">
     <div style="display:flex; justify-content: space-between">
       <div>
-          <button class="w3-btn w3-black" title="Open repository" v-on:click="openRepo"><i class="fas fa-folder-open"></i></button>
-          <button class="w3-btn w3-black" title="Open recent" v-on:click="openRepoHistory"><i class="fas fa-history"></i></button>
+          <button class="w3-btn w3-black" title="Open directory" v-on:click="openRepo"><i class="fas fa-folder-open"></i></button>
+          <button class="w3-btn w3-black" title="Menu" v-on:click="openBarsMenu"><i class="fas fa-bars"></i></button>
           WasteTime
       </div>
       <div>
@@ -29,11 +34,12 @@
         <li>Electron: {{electronVersion}}</li>
       </ul>
     </div>
+    <hr style="margin-top: 0"/>
     <div v-if="loading" style="text-align: center">
       <div class="lds-dual-ring"></div>
     </div>
     <div v-if="stats">
-      <raw-reports-viewer :stats="stats"/>
+      <raw-reports-viewer v-if="viewIndex == viewIndexStats" :stats="stats"/>
     </div>
   </div>
   <script>
