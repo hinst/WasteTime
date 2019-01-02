@@ -4,7 +4,7 @@ const electronRemote = require('electron').remote
 const { Menu, MenuItem, dialog } = electronRemote
 import {Stats} from './stats';
 import './rawReportsViewer'
-const appObject = {
+const component = {
     el: '#app',
     data: function() {
         return {
@@ -53,4 +53,4 @@ const appObject = {
         }
     }
 };
-const app = new Vue(appObject);
+new Vue(component);

@@ -79,6 +79,7 @@ export class Stats {
                 targetProject.time += project.time;
             }
         }
+        projects.sort((a, b) => (a.time - b.time));
         return projects;
     }
 }
