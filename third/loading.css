@@ -11,8 +11,12 @@
     margin: 1px;
     border-radius: 50%;
     border: 5px solid #000;
-    border-color: #000 transparent #000 transparent;
+    border-color: black transparent black transparent;
     animation: lds-dual-ring 1.2s linear infinite;
+  }
+  body.hwt-night .lds-dual-ring:after {
+    border: 5px solid white;
+    border-color: white transparent white transparent;
   }
   @keyframes lds-dual-ring {
     0% {

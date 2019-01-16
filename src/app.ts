@@ -38,7 +38,7 @@ const appComponent = {
                     this.loading = false;
                 }
             } else {
-                alert('You need to select one directory');
+                alert(`Selected directories found: ${files.length}. Please select one directory.`);
             }
         },
         openBarsMenu: function() {
