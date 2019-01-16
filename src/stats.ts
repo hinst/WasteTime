@@ -239,9 +239,13 @@ function getElementRows(element): [] {
     return element.childNodes.filter(node => node.tagName && node.tagName.toLowerCase() == "tr");
 }
 
+function checkNodeTagMatch(node, tags: string[]): boolean {
+    const tagName: string = node.tagName ? node.tagName.toLowerCase() : null;
+    return tags.some(tag => tag == tagName);
+}
+
 function getTableRows(tableElement) {
-    const bodies = tableElement.childNodes.filter(node => node.tagName &&
-        (node.tagName.toLowerCase() == "tbody" || node.tagName.toLowerCase() == "thead"));
+    const bodies = tableElement.childNodes.filter(node => checkNodeTagMatch(node, ['tbody', 'thead']));
     if (bodies.length) {
         const rows = [];
         bodies.forEach(body => {
@@ -254,9 +258,7 @@ function getTableRows(tableElement) {
 }
 
 function getRowCells(rowElement) {
-    return rowElement.childNodes.filter(node => node.tagName &&
-        (node.tagName.toLowerCase() == "td" || node.tagName.toLowerCase() == "th")
-    );
+    return rowElement.childNodes.filter(node => checkNodeTagMatch(node, ['td', 'th']));
 }
 
 function detectLeaderboardTable(table) {
