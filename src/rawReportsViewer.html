@@ -1,5 +1,7 @@
 <div>
-    There are <mark>{{stats.weeks ? stats.weeks.length : 0}}</mark> entries. Total duration: <mark>{{ durationToText(stats.totalDuration) }}</mark>
+    <div class="w3-panel">
+        There are {{stats.weeks ? stats.weeks.length : 0}} entries. Total duration: {{ durationToText(stats.totalDuration) }}
+    </div>
     <div v-for="week in stats.weeks" class="w3-panel w3-border">
         <raw-report-viewer :week="week"/>
     </div>

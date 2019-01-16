@@ -1,13 +1,16 @@
-<div>
+<div style="padding-top: 1px; padding-bottom: 1px">
     {{week.subject}}
     •
     {{durationToText(week.totalDuration)}}
-    •
-    <toggle-button v-on:toggled="toggleProjectsPanel($event)"/>
-    projects: {{week.projects.length}}
-    •
-    <toggle-button v-on:toggled="toggleLanguagesPanel($event)"/>
-    languages: {{week.languages.length}}
+    <span style="white-space: nowrap; display: inline-block">
+        <toggle-button v-on:toggled="toggleProjectsPanel($event)"/>
+        projects: {{week.projects.length}}
+    </span>
+    
+    <span style="white-space: nowrap; display: inline-block">
+        <toggle-button v-on:toggled="toggleLanguagesPanel($event)"/>
+        languages: {{week.languages.length}}
+    </span>
 
     <div v-if="projectsPanelVisible">
             <div class="w3-panel w3-leftbar">Projects</div>
@@ -18,11 +21,11 @@
         </ul>
     </div>
 
-    <div v-if="languagesPanelVisible">
+    <div v-if="languagesPanelVisible" style="white-space: nowrap">
         <div class="w3-panel w3-leftbar">Languages</div>
         <ul>
             <li v-for="language in week.languages">
-                {{language.title}} == {{ durationToText(language.time) }}
+                {{language.title}} = {{ durationToText(language.time) }}
             </li>
         </ul>
     </div>

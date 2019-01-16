@@ -19,15 +19,19 @@
         .w3-btn, .w3-button {
             padding: 5px 10px;
         }
+        body {
+            background-color: white;
+        }
         body.hwt-night {
             color: white;
-            background-color: darkslategrey;
+            background-color: #002b36;
         }
         body .w3-theme-dark {
             border: 1px solid black;
         }
         body.hwt-night .w3-theme-dark {
-            border: 1px solid white;
+            border: 1px solid grey;
+            border-radius: 3px;
         }
     </style>
 </head>
@@ -35,7 +39,7 @@
     <input id="fileDirInput" type="file" style="display: none" webkitdirectory/>
     <!-- All of the Node.js APIs are available in this renderer process. -->
     <div id="app" class="w3-container">
-        <div style="display:flex; justify-content: space-between">
+        <div style="display:flex; justify-content: space-between" class="w3-border-bottom">
             <div>
                 <button class="w3-btn w3-theme-dark" title="Open directory" v-on:click="openRepo"><i class="fas fa-folder-open"></i></button>
                 <button class="w3-btn w3-theme-dark" title="Menu" v-on:click="openBarsMenu"><i class="fas fa-bars"></i></button>
@@ -45,14 +49,14 @@
                 <button class="w3-btn w3-theme-dark" title="Show debug info" v-on:click="toggleDebugInfo"><i class="fas fa-bug"></i></button>
             </div>
         </div>
-        <div v-if="debugInfoVisible" class="w3-panel w3-border">
-            <ul>
-                <li>Node: {{nodeVersion}}</li>
-                <li>Chrome: {{chromeVersion}}</li>
-                <li>Electron: {{electronVersion}}</li>
-            </ul>
+        <div v-if="debugInfoVisible" class="w3-panel w3-border-left w3-border-bottom" style="margin-top: 0; padding-bottom: 8px">
+            <h3>Settings</h3>
+            <input type="checkbox" v-model="darkUiEnabled"/> Dark UI <br/>
+            <h3>Version info</h3>
+            Node: {{nodeVersion}}<br/>
+            Chrome: {{chromeVersion}}<br/>
+            Electron: {{electronVersion}}<br/>
         </div>
-        <hr style="margin-top: 0"/>
         <div v-if="loading" style="text-align: center">
             <div class="lds-dual-ring"></div>
         </div>

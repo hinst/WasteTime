@@ -31,17 +31,17 @@ export class Stats {
             const filePath: string = dir + '/' + file;
             if (filePath.endsWith('.eml')) {
                 const fileContent = fs.readFileSync(filePath, 'utf-8');
-                const data = await this.loadFile(fileContent);
+                const data = await this.loadFile(filePath, fileContent);
                 // fs.writeFileSync(filePath + '.html', data.html);
                 // fs.writeFileSync(filePath + '.txt', data.text);
             }
         }
     }
-    private async loadFile(filePath, fileContent): Promise<EmlData> {
+    private async loadFile(filePath: string, fileContent): Promise<EmlData> {
         const promise = new Promise<EmlData>((resolve, reject) => {
             mailparser.simpleParser(fileContent, (error, data: EmlData) => {
                 if (!error) {
-                    this.loadEmail(data);
+                    this.loadEmail(filePath, data);
                     resolve(data);
                 } else {
                     console.error(error);
@@ -51,7 +51,7 @@ export class Stats {
         });
         return promise;
     }
-    private loadEmail(filePath, data: EmlData) {
+    private loadEmail(filePath: string, data: EmlData) {
         if (data.subject.includes('WakaTime Weekly Summary')) {
             const date = extractDateFromSubject(data.subject)
             const weekInfo = parseTextContent(data.text);
@@ -60,7 +60,7 @@ export class Stats {
             this.weeks.push(weekInfo)
         }
         if (data.subject.includes(' board')) {
-            const date = extractDateFromFileName()
+            const date = extractDateFromFileName('')
         }
     }
     get totalDuration() {

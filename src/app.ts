@@ -5,6 +5,7 @@ const { Menu, MenuItem, dialog } = electronRemote
 import {Stats} from './stats';
 import './rawReportsViewer'
 import './topListViewer'
+const nightStyleSheetClass = 'hwt-night'
 const appComponent = {
     el: '#app',
     data: function() {
@@ -19,6 +20,17 @@ const appComponent = {
             viewIndex: 0,
             viewIndexRaws: 0,
             viewIndexTops: 1,
+            darkUiEnabled: false,
+        }
+    },
+    watch: {
+        darkUiEnabled: function(value) {
+            const body = document.getElementsByTagName('body')[0];
+            if (value)
+                body.classList.add(nightStyleSheetClass);
+            else
+                body.classList.remove(nightStyleSheetClass);
+            localStorage.setItem('darkUiEnabled', '' + value);
         }
     },
     methods: {
@@ -52,7 +64,11 @@ const appComponent = {
                 click: () => { this.viewIndex = this.viewIndexTops }
             }));
             menu.popup({ window: electronRemote.getCurrentWindow() });
-        }
+        },
+    },
+    created: function() {
+        console.log('created')
+        this.darkUiEnabled = localStorage.getItem('darkUiEnabled') == ''+true
     }
 };
 new Vue(appComponent);
