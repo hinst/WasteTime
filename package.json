@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.5.0",
+    "@types/node": "^10.12.18",
     "mailparser": "^2.4.3",
     "node-html-parser": "^1.1.11",
     "source-map-support": "^0.5.9",

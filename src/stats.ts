@@ -2,6 +2,8 @@ import { EmlData } from "./emlFormat";
 
 const mailparser = require('mailparser')
 const fs = require('fs')
+import * as path from 'path'
+const node_html_parser = require('node-html-parser');
 
 export class InfoRow {
     title: string
@@ -57,10 +59,12 @@ export class Stats {
             const weekInfo = parseTextContent(data.text);
             weekInfo.subject = data.subject;
             weekInfo.startDate = date;
-            this.weeks.push(weekInfo)
+            this.weeks.push(weekInfo);
         }
         if (data.subject.includes(' board')) {
-            const date = extractDateFromFileName('')
+            const fileName = path.basename(filePath);
+            const date = extractDateFromFileName(fileName);
+            parseLeaderboardHtmlContent(data.html);
         }
     }
     get totalDuration() {
@@ -218,4 +222,61 @@ function extractDateFromFileName(fileName: string): Date {
         result = new Date(year, month - 1, day);
     }
     return result;
+}
+
+function parseLeaderboardHtmlContent(textString: string) {
+    const document = node_html_parser.parse(textString);
+    const tables = getAllTables(document);
+    tables.forEach(table => {
+        const matched = detectLeaderboardTable(table);
+        if (matched)
+            console.log(matched);
+        if (false) console.log(table.querySelectorAll('table').length);
+    });
+}
+
+function getElementRows(element): [] {
+    return element.childNodes.filter(node => node.tagName && node.tagName.toLowerCase() == "tr");
+}
+
+function getTableRows(tableElement) {
+    const bodies = tableElement.childNodes.filter(node => node.tagName &&
+        (node.tagName.toLowerCase() == "tbody" || node.tagName.toLowerCase() == "thead"));
+    if (bodies.length) {
+        const rows = [];
+        bodies.forEach(body => {
+            rows.push(...getElementRows(body));
+        });
+        return rows;
+    } else {
+        return getElementRows(tableElement);
+    }
+}
+
+function getRowCells(rowElement) {
+    return rowElement.childNodes.filter(node => node.tagName &&
+        (node.tagName.toLowerCase() == "td" || node.tagName.toLowerCase() == "th")
+    );
+}
+
+function detectLeaderboardTable(table) {
+    const rows = getTableRows(table);
+    if (rows.length > 0) {
+        const headerRows = getRowCells(rows[0]);
+        const getHeaderCell = i => headerRows[i].text.trim().toLowerCase();
+        if (false && headerRows.length > 0)
+            console.log(headerRows[0]);
+        return headerRows.length >= 3 &&
+            getHeaderCell(0) == "rank" &&
+            getHeaderCell(1) == "programmer" &&
+            getHeaderCell(2) == "hours coded";
+    }
+}
+
+function getAllTables(document): any[] {
+    const tables: any[] = document.querySelectorAll('table');
+    tables.forEach(table => {
+        tables.push(...getAllTables(table));
+    });
+    return tables;
 }
