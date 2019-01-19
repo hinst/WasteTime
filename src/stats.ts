@@ -224,15 +224,25 @@ function extractDateFromFileName(fileName: string): Date {
     return result;
 }
 
-function parseLeaderboardHtmlContent(textString: string) {
+function parseLeaderboardHtmlContent(textString: string): InfoRow[] {
     const document = node_html_parser.parse(textString);
     const tables = getAllTables(document);
+    const infoRows: InfoRow[] = []
     tables.forEach(table => {
         const matched = detectLeaderboardTable(table);
-        if (matched)
-            console.log(matched);
-        if (false) console.log(table.querySelectorAll('table').length);
+        if (matched) {
+            const rows = getTableRows(table);
+            for (let i = 1; i < rows.length; i++) {
+                const cells = getRowCells(rows[i]);
+                const infoRow = new InfoRow();
+                infoRow.title = cells[LeaderboardColumns.keys.programmer.index].text.trim();
+                const timeText = cells[LeaderboardColumns.keys.hoursCoded.index].text.trim();
+                infoRow.time = parseWakaDuration(timeText);
+                infoRows.push(infoRow);
+            }
+        }
     });
+    return infoRows;
 }
 
 function getElementRows(element): [] {
@@ -257,6 +267,31 @@ function getTableRows(tableElement) {
     }
 }
 
+class LeaderboardColumn {
+    constructor(title: string, index: number) {
+        this.title = title;
+        this.index = index;
+    }
+    title: string;
+    index: number;
+}
+
+class LeaderboardColumns {
+    static keys: { [key: string]: LeaderboardColumn} = {
+        rank: new LeaderboardColumn("rank", 0),
+        programmer: new LeaderboardColumn("programmer", 1),
+        hoursCoded: new LeaderboardColumn("hours coded", 2),
+    }
+    static array: LeaderboardColumn[]
+    static initialize() {
+        this.array = []
+        for (const key in this.keys) {
+            const column = this.keys[key];
+            this.array[column.index] = column;
+        }
+    }
+}; LeaderboardColumns.initialize();
+
 function getRowCells(rowElement) {
     return rowElement.childNodes.filter(node => checkNodeTagMatch(node, ['td', 'th']));
 }
@@ -269,9 +304,7 @@ function detectLeaderboardTable(table) {
         if (false && headerRows.length > 0)
             console.log(headerRows[0]);
         return headerRows.length >= 3 &&
-            getHeaderCell(0) == "rank" &&
-            getHeaderCell(1) == "programmer" &&
-            getHeaderCell(2) == "hours coded";
+            LeaderboardColumns.array.every((column, index) => getHeaderCell(index) == column.title);
     }
 }
 
