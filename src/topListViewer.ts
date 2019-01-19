@@ -1,6 +1,6 @@
-const fs = require('fs')
-const Vue = require('vue/dist/vue.common.js')
-import {uiMixin} from './uiMixin'
+const fs = require('fs');
+const Vue = require('vue/dist/vue.common.js');
+import {uiMixin} from './uiMixin';
 
 export const topListViewer = {
     template: fs.readFileSync('./src/topListViewer.html').toString(),
@@ -12,11 +12,11 @@ export const topListViewer = {
             currentDayType: false,
             currentDayType24: false,
             currentDayType8: true,
-        }
+        };
     },
     created: function() {
-        console.log('topListViewer created')
-        this.rows = this.stats.getTopProjects()
+        console.log('topListViewer created');
+        this.rows = this.stats.getTopProjects();
     },
     methods: {
         changeCurrentDayType() {
@@ -25,8 +25,8 @@ export const topListViewer = {
     },
     computed: {
         currentDayTypeAsString() {
-            return this.currentDayType ? "8h day" : "24h day"
+            return this.currentDayType ? "8h day" : "24h day";
         }
     }
-}
-Vue.component('top-list-viewer', topListViewer)
+};
+Vue.component('top-list-viewer', topListViewer);

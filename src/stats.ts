@@ -1,33 +1,33 @@
 import { EmlData } from "./emlFormat";
 
-const mailparser = require('mailparser')
-const fs = require('fs')
-import * as path from 'path'
+const mailparser = require('mailparser');
+const fs = require('fs');
+import * as path from 'path';
 const node_html_parser = require('node-html-parser');
 
 export class InfoRow {
-    title: string
+    title: string;
     /** seconds */
-    time: number = 0
+    time: number = 0;
 }
 
 export class WeekInfo {
     constructor() {
     }
     /** Subject of email letter  */
-    subject: string
-    startDate: Date
-    totalDuration: number = 0
-    projects: InfoRow[] = []
-    languages: InfoRow[] = []
-    editors: InfoRow[] = []
-    systems: InfoRow[] = []
+    subject: string;
+    startDate: Date;
+    totalDuration: number = 0;
+    projects: InfoRow[] = [];
+    languages: InfoRow[] = [];
+    editors: InfoRow[] = [];
+    systems: InfoRow[] = [];
 }
 
 export class Stats {
-    weeks: WeekInfo[]
+    weeks: WeekInfo[];
     async loadDir(dir: string) {
-        this.weeks = []
+        this.weeks = [];
         const files = fs.readdirSync(dir);
         for (const file of files) {
             const filePath: string = dir + '/' + file;
@@ -55,7 +55,7 @@ export class Stats {
     }
     private loadEmail(filePath: string, data: EmlData) {
         if (data.subject.includes('WakaTime Weekly Summary')) {
-            const date = extractDateFromSubject(data.subject)
+            const date = extractDateFromSubject(data.subject);
             const weekInfo = parseTextContent(data.text);
             weekInfo.subject = data.subject;
             weekInfo.startDate = date;
@@ -74,7 +74,7 @@ export class Stats {
         return sum;
     }
     getTopProjects(): InfoRow[] {
-        const projects: InfoRow[] = []
+        const projects: InfoRow[] = [];
         for (const week of this.weeks) {
             for (const project of week.projects) {
                 let targetProject = projects.find(p => p.title == project.title);
@@ -191,13 +191,13 @@ export function durationToText(duration: number, useWorkingDay: boolean): string
         if (value > 0)
             text += '' + value + unit + ' ';
     }
-    add(days, 'd')
-    add(hours, 'h')
-    add(minutes, 'm')
-    add(seconds, 's')
+    add(days, 'd');
+    add(hours, 'h');
+    add(minutes, 'm');
+    add(seconds, 's');
     if (text.length == 0)
-        text = '0'
-    return text
+        text = '0';
+    return text;
 }
 
 function parseWakaInfoRow(text: string): InfoRow {
@@ -227,7 +227,7 @@ function extractDateFromFileName(fileName: string): Date {
 function parseLeaderboardHtmlContent(textString: string): InfoRow[] {
     const document = node_html_parser.parse(textString);
     const tables = getAllTables(document);
-    const infoRows: InfoRow[] = []
+    const infoRows: InfoRow[] = [];
     tables.forEach(table => {
         const matched = detectLeaderboardTable(table);
         if (matched) {
@@ -281,16 +281,16 @@ class LeaderboardColumns {
         rank: new LeaderboardColumn("rank", 0),
         programmer: new LeaderboardColumn("programmer", 1),
         hoursCoded: new LeaderboardColumn("hours coded", 2),
-    }
-    static array: LeaderboardColumn[]
+    };
+    static array: LeaderboardColumn[];
     static initialize() {
-        this.array = []
+        this.array = [];
         for (const key in this.keys) {
             const column = this.keys[key];
             this.array[column.index] = column;
         }
     }
-}; LeaderboardColumns.initialize();
+} LeaderboardColumns.initialize();
 
 function getRowCells(rowElement) {
     return rowElement.childNodes.filter(node => checkNodeTagMatch(node, ['td', 'th']));

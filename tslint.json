@@ -1,0 +1,11 @@
+{
+    "defaultSeverity": "error",
+    "extends": [
+    ],
+    "jsRules": {},
+    "rules": {
+        "semicolon": [true, "always"],
+        "await-promise": [true, "always"],
+    },
+    "rulesDirectory": []
+}
