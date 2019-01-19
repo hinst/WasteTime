@@ -39,7 +39,7 @@ const appComponent = {
         },
         openRepo: async function() {
             const files: string[] = dialog.showOpenDialog({properties: ['openDirectory']});
-            if (files.length == 1) {
+            if (files && files.length == 1) {
                 const directory = files[0];
                 const stats = new Stats();
                 this.loading = true;
