@@ -67,6 +67,9 @@
             <div v-if="viewIndex == viewIndexTops">
                 <top-list-viewer :stats="stats"/>
             </div>
+            <div v-if="viewIndex == viewIndexLeaderRaws">
+                <raw-leader-viewer :prop-stats="stats"/>
+            </div>
         </div>
         <div v-if="!stats && !loading">
             Project is not loaded

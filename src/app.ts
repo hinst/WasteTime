@@ -1,11 +1,12 @@
-console.log('Now starting app...')
-const Vue = require('vue/dist/vue.common.js')
-const electronRemote = require('electron').remote
-const { Menu, MenuItem, dialog } = electronRemote
+console.log('Now starting app...');
+const Vue = require('vue/dist/vue.common.js');
+const electronRemote = require('electron').remote;
+const { Menu, MenuItem, dialog } = electronRemote;
 import {Stats} from './stats';
-import './rawReportsViewer'
-import './topListViewer'
-const nightStyleSheetClass = 'hwt-night'
+import './rawReportsViewer';
+import './topListViewer';
+import './rawLeaderViewer';
+const nightStyleSheetClass = 'hwt-night';
 const appComponent = {
     el: '#app',
     data: function() {
@@ -20,6 +21,7 @@ const appComponent = {
             viewIndex: 0,
             viewIndexRaws: 0,
             viewIndexTops: 1,
+            viewIndexLeaderRaws: 2,
             darkUiEnabled: false,
         }
     },
@@ -57,18 +59,21 @@ const appComponent = {
             const menu = new Menu();
             menu.append(new MenuItem({
                 label: "Raw view", 
-                click: () => { this.viewIndex = this.viewIndexRaws }
+                click: () => { this.viewIndex = this.viewIndexRaws; }
             }));
             menu.append(new MenuItem({
                 label: "Top view", 
-                click: () => { this.viewIndex = this.viewIndexTops }
+                click: () => { this.viewIndex = this.viewIndexTops; }
+            }));
+            menu.append(new MenuItem({
+                label: "Raw leader view", 
+                click: () => { this.viewIndex = this.viewIndexLeaderRaws; }
             }));
             menu.popup({ window: electronRemote.getCurrentWindow() });
         },
     },
     created: function() {
-        console.log('created')
-        this.darkUiEnabled = localStorage.getItem('darkUiEnabled') == ''+true
+        this.darkUiEnabled = localStorage.getItem('darkUiEnabled') == ''+true;
     }
 };
 new Vue(appComponent);

@@ -46,7 +46,6 @@ export class Stats {
                 // fs.writeFileSync(filePath + '.txt', data.text);
             }
         }
-        console.log(this.leaderWeeks);
     }
     private async loadFile(filePath: string, fileContent): Promise<EmlData> {
         const promise = new Promise<EmlData>((resolve, reject) => {
@@ -314,8 +313,6 @@ function detectLeaderboardTable(table) {
     if (rows.length > 0) {
         const headerRows = getRowCells(rows[0]);
         const getHeaderCell = i => headerRows[i].text.trim().toLowerCase();
-        if (false && headerRows.length > 0)
-            console.log(headerRows[0]);
         return headerRows.length >= 3 &&
             LeaderboardColumns.array.every((column, index) => getHeaderCell(index) == column.title);
     }
