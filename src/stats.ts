@@ -24,10 +24,18 @@ export class WeekInfo {
     systems: InfoRow[] = [];
 }
 
+class LeaderboardWeekInfo {
+    subject: string;
+    date: Date;
+    rows: InfoRow[];
+}
+
 export class Stats {
     weeks: WeekInfo[];
+    leaderWeeks: LeaderboardWeekInfo[];
     async loadDir(dir: string) {
         this.weeks = [];
+        this.leaderWeeks = [];
         const files = fs.readdirSync(dir);
         for (const file of files) {
             const filePath: string = dir + '/' + file;
@@ -38,6 +46,7 @@ export class Stats {
                 // fs.writeFileSync(filePath + '.txt', data.text);
             }
         }
+        console.log(this.leaderWeeks);
     }
     private async loadFile(filePath: string, fileContent): Promise<EmlData> {
         const promise = new Promise<EmlData>((resolve, reject) => {
@@ -64,7 +73,11 @@ export class Stats {
         if (data.subject.includes(' board')) {
             const fileName = path.basename(filePath);
             const date = extractDateFromFileName(fileName);
-            parseLeaderboardHtmlContent(data.html);
+            const leaderWeekInfo = new LeaderboardWeekInfo();
+            leaderWeekInfo.subject = data.subject;
+            leaderWeekInfo.date = date;
+            leaderWeekInfo.rows = parseLeaderboardHtmlContent(data.html);
+            this.leaderWeeks.push(leaderWeekInfo);
         }
     }
     get totalDuration() {
