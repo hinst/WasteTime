@@ -1,1 +1,5 @@
-<button class="w3-btn w3-theme-dark" v-on:click="receiveClick">{{marker}} {{title}}</button>
+<button class="w3-btn w3-theme-dark" v-on:click="receiveClick">
+    <i v-if="enabled" class="fas fa-chevron-circle-down"></i>
+    <i v-else class="fas fa-chevron-circle-right"></i>
+    {{title}}
+</button>

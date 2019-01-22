@@ -1,5 +1,9 @@
 <div>
     <toggle-button v-model="dataLeaderListVisible"/>
     {{propItem.subject}} {{propItem.date}}
-    <div v-if="dataLeaderListVisible" class="w3-panel w3-border-left">leaders</div>
+    <div v-if="dataLeaderListVisible" class="w3-panel w3-border-left">
+        <ol>
+            <li v-for="row in propItem.rows">{{durationToText(row.time)}} = {{row.title}}</li>
+        </ol>
+    </div>
 </div>

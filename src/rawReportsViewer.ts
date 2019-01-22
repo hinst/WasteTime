@@ -4,6 +4,7 @@ import './rawReportViewer';
 import { Stats } from './stats';
 const Vue = require('vue/dist/vue.common.js');
 const fs = require('fs');
+
 const component = {
     template: fs.readFileSync('./src/rawReportsViewer.html').toString(),
     props: ['stats'],

@@ -3,12 +3,12 @@
     •
     {{durationToText(week.totalDuration)}}
     <span style="white-space: nowrap; display: inline-block">
-        <toggle-button v-on:toggled="toggleProjectsPanel($event)"/>
+        <toggle-button v-model="projectsPanelVisible"/>
         projects: {{week.projects.length}}
     </span>
     
     <span style="white-space: nowrap; display: inline-block">
-        <toggle-button v-on:toggled="toggleLanguagesPanel($event)"/>
+        <toggle-button v-model="languagesPanelVisible"/>
         languages: {{week.languages.length}}
     </span>
 

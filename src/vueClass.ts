@@ -2,12 +2,12 @@ export class VueComponentObject {
     template: string;
     created: Function;
     props: string[] = [];
-    data = () => {};    
+    data = () => {};
     methods = {};
+    mixins: any;
 }
 
 export function createVueComponent(instance: any) {
-    console.log(Object.keys(instance));
     const component = new VueComponentObject();
     const data = {};
     for (let propKey in instance) {
@@ -19,7 +19,6 @@ export function createVueComponent(instance: any) {
     }
     component.data = () => Object.assign({}, data);
     const proto = Object.getPrototypeOf(instance);
-    console.log(Object.getOwnPropertyNames(proto));
     for (let funcKey of Object.getOwnPropertyNames(proto)) {
         if (funcKey == 'created')
             component.created = proto[funcKey];
@@ -27,7 +26,8 @@ export function createVueComponent(instance: any) {
             component.methods[funcKey] = proto[funcKey];
     }
     component.template = instance.template;
-    console.log(component);
+    if (instance.mixins)
+        component.mixins = instance.mixins;
     return component;
 }
 

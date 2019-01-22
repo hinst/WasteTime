@@ -9,11 +9,6 @@ export const toggleButton = {
             enabled: false
         };
     },
-    computed: {
-        marker: function() {
-            return this.enabled ? '▼' : '▶';
-        }
-    },
     methods: {
         receiveClick: function() {
             this.enabled = !this.enabled;
