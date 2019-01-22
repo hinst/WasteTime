@@ -24,7 +24,7 @@ export class WeekInfo {
     systems: InfoRow[] = [];
 }
 
-class LeaderboardWeekInfo {
+export class LeaderboardWeekInfo {
     subject: string;
     date: Date;
     rows: InfoRow[];

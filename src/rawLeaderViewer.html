@@ -1,6 +1,3 @@
 <div>
-    <div v-for='report in propStats.leaderWeeks' class="w3-panel w3-border">
-        {{report.subject}} {{report.date}
-        <toggle-button v-on:toggled="toggleProjectsPanel($event)"/>}
-    </div>
+    <raw-leader-viewer-item v-for='report in propStats.leaderWeeks' :propItem='report'/>
 </div>

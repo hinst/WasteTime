@@ -1,13 +1,13 @@
-const fs = require('fs')
-const Vue = require('vue/dist/vue.common.js')
+const fs = require('fs');
+const Vue = require('vue/dist/vue.common.js');
 
 export const toggleButton = {
     template: fs.readFileSync('./src/toggleButton.html').toString(),
-    props: ['title'],
+    props: ['title', 'value'],
     data: function() {
         return {
             enabled: false
-        }
+        };
     },
     computed: {
         marker: function() {
@@ -17,8 +17,11 @@ export const toggleButton = {
     methods: {
         receiveClick: function() {
             this.enabled = !this.enabled;
-            this.$emit('toggled', this.enabled);
+            this.$emit('input', this.enabled);
         }
+    },
+    created() {
+        this.enabled = this.value;
     }
-}
+};
 Vue.component('toggle-button', toggleButton);
