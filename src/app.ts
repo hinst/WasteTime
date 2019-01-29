@@ -1,11 +1,12 @@
 console.log('Now starting app...');
-const Vue = require('vue/dist/vue.common.js');
-const electronRemote = require('electron').remote;
+import * as  Vue from 'vue/dist/vue.common.js';
+const electronRemote = require('electron');
 const { Menu, MenuItem, dialog } = electronRemote;
 import {Stats} from './stats';
 import './rawReportsViewer';
 import './topListViewer';
 import './rawLeaderViewer';
+
 const nightStyleSheetClass = 'hwt-night';
 const appComponent = {
     el: '#app',
@@ -23,7 +24,7 @@ const appComponent = {
             viewIndexTops: 1,
             viewIndexLeaderRaws: 2,
             darkUiEnabled: false,
-        }
+        };
     },
     watch: {
         darkUiEnabled: function(value) {
