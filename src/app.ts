@@ -1,15 +1,17 @@
 console.log('Now starting app...');
 import * as  Vue from 'vue/dist/vue.common.js';
-const electronRemote = require('electron');
+const electronRemote = require('electron').remote;
 const { Menu, MenuItem, dialog } = electronRemote;
 import {Stats} from './stats';
 import './rawReportsViewer';
 import './topListViewer';
 import './rawLeaderViewer';
+import * as fs from 'fs';
 
 const nightStyleSheetClass = 'hwt-night';
 const appComponent = {
     el: '#app',
+    template: fs.readFileSync('./src/app.html').toString(),
     data: function() {
         return {
             nodeVersion: process.versions.node,

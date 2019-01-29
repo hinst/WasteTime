@@ -1,0 +1,41 @@
+<div>
+    <input id="fileDirInput" type="file" style="display: none" webkitdirectory/>
+    <!-- All of the Node.js APIs are available in this renderer process. -->
+    <div class="w3-container">
+        <div style="display:flex; justify-content: space-between" class="w3-border-bottom">
+            <div>
+                <button class="w3-btn w3-theme-dark" title="Open directory" v-on:click="openRepo"><i class="fas fa-folder-open"></i></button>
+                <button class="w3-btn w3-theme-dark" title="Menu" v-on:click="openBarsMenu"><i class="fas fa-bars"></i></button>
+                WasteTime
+            </div>
+            <div>
+                <button class="w3-btn w3-theme-dark" title="Show debug info" v-on:click="toggleDebugInfo"><i class="fas fa-bug"></i></button>
+            </div>
+        </div>
+        <div v-if="debugInfoVisible" class="w3-panel w3-border-left w3-border-bottom" style="margin-top: 0; padding-bottom: 8px">
+            <h3>Settings</h3>
+            <input type="checkbox" v-model="darkUiEnabled"/> Dark UI <br/>
+            <h3>Version info</h3>
+            Node: {{nodeVersion}}<br/>
+            Chrome: {{chromeVersion}}<br/>
+            Electron: {{electronVersion}}<br/>
+        </div>
+        <div v-if="loading" style="text-align: center">
+            <div class="lds-dual-ring"></div>
+        </div>
+        <div v-if="stats">
+            <div v-if="viewIndex == viewIndexRaws">
+                <raw-reports-viewer :stats="stats"/>
+            </div>
+            <div v-if="viewIndex == viewIndexTops">
+                <top-list-viewer :stats="stats"/>
+            </div>
+            <div v-if="viewIndex == viewIndexLeaderRaws">
+                <raw-leader-viewer :prop-stats="stats"/>
+            </div>
+        </div>
+        <div v-if="!stats && !loading">
+            Project is not loaded
+        </div>
+    </div>
+</div>
